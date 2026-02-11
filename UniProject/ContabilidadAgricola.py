@@ -10,10 +10,12 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 
-# -----------------------------
-# Funciones Auxiliares y Inicialización de la DB
-# -----------------------------
+
+# ===========================
+# FUNCIONES AUXILIARES Y INICIALIZACIÓN DE DB
+# ===========================
 def inicializar_db():
+    """Inicializa la base de datos con todas las tablas necesarias."""
     conn = sqlite3.connect("cultivos.db")
     cursor = conn.cursor()
     # Tabla: usuarios
@@ -129,6 +131,7 @@ def inicializar_db():
     conn.close()
 
 def obtener_personas():
+    """Obtiene la lista de usuarios (personas) de la BD."""
     conn = sqlite3.connect("cultivos.db")
     cursor = conn.cursor()
     cursor.execute("SELECT id, username FROM usuarios")
@@ -137,6 +140,7 @@ def obtener_personas():
     return personas
 
 def obtener_tipo_hortaliza():
+    """Obtiene los tipos de hortaliza de la BD."""
     conn = sqlite3.connect("cultivos.db")
     cursor = conn.cursor()
     cursor.execute("SELECT codigo, nombre FROM tipo_hortaliza")
@@ -145,6 +149,7 @@ def obtener_tipo_hortaliza():
     return datos
 
 def obtener_tipo_suelo():
+    """Obtiene los tipos de suelo de la BD."""
     conn = sqlite3.connect("cultivos.db")
     cursor = conn.cursor()
     cursor.execute("SELECT codigo, nombre FROM tipo_suelo")
@@ -153,6 +158,7 @@ def obtener_tipo_suelo():
     return datos
 
 def obtener_climas():
+    """Obtiene los climas de la BD."""
     conn = sqlite3.connect("cultivos.db")
     cursor = conn.cursor()
     cursor.execute("SELECT codigo, nombre FROM clima")
@@ -160,10 +166,13 @@ def obtener_climas():
     conn.close()
     return datos
 
-# -----------------------------
-# Clase Hectarea
-# -----------------------------
+# ===========================
+# CLASE MODELO: Hectarea
+# ===========================
+
 class Hectarea:
+    """Modelo de datos para una hectárea de cultivo."""
+    
     def __init__(self, numero, tipo_de_cultivo, siembra, primera_cosecha=None, cosecha_rutinaria=None, tipo_suelo=None, temperatura=None):
         self.numero = numero
         self.tipo_de_cultivo = tipo_de_cultivo.lower()
@@ -232,12 +241,14 @@ class Hectarea:
         conn.commit()
         conn.close()
 
-# -----------------------------
-# Pantallas de la Aplicación
-# -----------------------------
+# ===========================
+# PANTALLAS DE USUARIO COMUNES
+# ===========================
 
 # LoginScreen: Inicio de sesión
 class LoginScreen(QWidget):
+    """Pantalla de inicio de sesión."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -304,6 +315,8 @@ class LoginScreen(QWidget):
 
 # MainScreen: Pantalla principal con menú interno
 class MainScreen(QWidget):
+    """Pantalla principal con menú de navegación."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -376,6 +389,8 @@ class MainScreen(QWidget):
 
 # RegistrarScreen: Registro de Hectáreas (sin campos para fechas de cosecha)
 class RegistrarScreen(QWidget):
+    """Pantalla para registrar nuevas hectáreas."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -451,6 +466,8 @@ class RegistrarScreen(QWidget):
 
 # BuscarScreen: Búsqueda de Hectáreas
 class BuscarScreen(QWidget):
+    """Pantalla para buscar una hectárea específica."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -494,6 +511,8 @@ class BuscarScreen(QWidget):
 
 # PerfilScreen: Perfil de Usuario
 class PerfilScreen(QWidget):
+    """Pantalla que muestra el perfil del usuario actual."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -517,6 +536,8 @@ class PerfilScreen(QWidget):
 
 # InformeScreen: Informe de Gestión de Cultivo
 class InformeScreen(QWidget):
+    """Pantalla que muestra el informe de gestión de cultivos."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -558,6 +579,8 @@ class InformeScreen(QWidget):
 
 # ConsultaScreen: Consulta de Tipos de Cultivo (Hortalizas)
 class ConsultaScreen(QWidget):
+    """Pantalla para consultar tipos de hortaliza."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -599,8 +622,14 @@ class ConsultaScreen(QWidget):
         else:
             self.result_area.setPlainText("No se encontró el tipo de cultivo.")
 
+# ===========================
+# PANTALLAS DE GESTIÓN (ADMIN)
+# ===========================
+
 # GestionarHectareasScreen: Gestión de Hectáreas (Admin)
 class GestionarHectareasScreen(QWidget):
+    """Pantalla de administración de hectáreas (solo admin)."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -683,6 +712,8 @@ class GestionarHectareasScreen(QWidget):
 
 # GestionCultivoScreen: Gestión de Cultivos (Admin)
 class GestionCultivoScreen(QWidget):
+    """Pantalla de gestión de cultivos (solo admin)."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -923,8 +954,14 @@ class CultivosScreen(QWidget):
         layout.addWidget(btn_volver, alignment=Qt.AlignCenter)
         self.setLayout(layout)
 
+# ===========================
+# PANTALLAS DE GESTIÓN DE DATOS (ADMIN)
+# ===========================
+
 # TipoHortalizaManagementScreen: ABM para tipo_hortaliza
 class TipoHortalizaManagementScreen(QWidget):
+    """Pantalla de gestión de tipos de hortaliza."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -1038,6 +1075,8 @@ class TipoHortalizaManagementScreen(QWidget):
 
 # TipoSueloManagementScreen: ABM para tipo_suelo
 class TipoSueloManagementScreen(QWidget):
+    """Pantalla de gestión de tipos de suelo."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -1155,6 +1194,8 @@ class TipoSueloManagementScreen(QWidget):
 
 # ClimaManagementScreen: ABM para clima
 class ClimaManagementScreen(QWidget):
+    """Pantalla de gestión de climas."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -1279,11 +1320,8 @@ class ClimaManagementScreen(QWidget):
 
 # TipoCultivoManagementScreen: ABM para tipo_cultivo (Solo Admin)
 class TipoCultivoManagementScreen(QWidget):
-    """
-    Pantalla de ABM para la tabla tipo_cultivo.
-    Permite ingresar el nombre del cultivo, seleccionar cuántos meses tarda en dar la primera cosecha
-    y cuántos meses tarda en dar la cosecha rutinaria.
-    """
+    """Pantalla de gestión de tipos de cultivo (solo admin)."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -1411,6 +1449,8 @@ class TipoCultivoManagementScreen(QWidget):
 
 # UserManagementScreen: Gestión de Usuarios (Solo Admin)
 class UserManagementScreen(QWidget):
+    """Pantalla de gestión de usuarios (solo admin)."""
+    
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -1533,28 +1573,14 @@ class UserManagementScreen(QWidget):
         except sqlite3.IntegrityError:
             QMessageBox.critical(self, "Error", "El nuevo username ya existe.")
 
-# CultivosScreen: Pantalla para mostrar datos de ejemplo (sin CRUD)
-class CultivosScreen(QWidget):
-    def __init__(self, controller):
-        super().__init__()
-        self.controller = controller
-        layout = QVBoxLayout(self)
-        label = QLabel("Pantalla: Cultivos (Ejemplo)")
-        label.setFont(QFont("Helvetica", 16, QFont.Bold))
-        layout.addWidget(label, alignment=Qt.AlignCenter)
-        text = QTextEdit()
-        text.setReadOnly(True)
-        text.setPlainText("Aquí se mostrarían cultivos en general (ej. maíz, trigo, tomate, etc.)\nEste ejemplo no tiene ABM.")
-        layout.addWidget(text)
-        btn_volver = QPushButton("Volver")
-        btn_volver.clicked.connect(lambda: self.controller.show_screen("main"))
-        layout.addWidget(btn_volver, alignment=Qt.AlignCenter)
-        self.setLayout(layout)
 
-# -----------------------------
-# Clase Principal: MainWindow y Controlador de Pantallas
-# -----------------------------
+# ===========================
+# PANTALLA PRINCIPAL
+# ===========================
+
 class MainWindow(QMainWindow):
+    """Ventana principal de la aplicación."""
+    
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Sistema de Cultivos")
@@ -1637,9 +1663,10 @@ class MainWindow(QMainWindow):
             self.screens["informe"].cargar_informe()
         self.stack.setCurrentWidget(self.screens[name])
 
-# -----------------------------
-# Ejecutar la aplicación
-# -----------------------------
+# ===========================
+# PUNTO DE ENTRADA
+# ===========================
+
 if __name__ == "__main__":
     inicializar_db()
     app = QApplication(sys.argv)
